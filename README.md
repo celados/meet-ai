@@ -69,9 +69,10 @@ Repository secrets for Web deployment:
 
 ```bash
 CF_DEPLOY_API_TOKEN
+CLOUDFLARE_ACCOUNT_ID
 ```
 
-`CF_DEPLOY_API_TOKEN` is the Wrangler deployment token used by CI. It is separate from the Worker runtime secret named `CLOUDFLARE_API_TOKEN`, which is used by the app when calling Cloudflare RealtimeKit.
+`CF_DEPLOY_API_TOKEN` is the Wrangler deployment token used by CI. `CLOUDFLARE_ACCOUNT_ID` lets Wrangler select the target account in GitHub Actions. The deploy token is separate from the Worker runtime secret named `CLOUDFLARE_API_TOKEN`, which is used by the app when calling Cloudflare RealtimeKit.
 
 Repository secrets for macOS desktop release:
 
