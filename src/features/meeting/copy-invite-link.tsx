@@ -1,4 +1,4 @@
-import { Check, Copy } from 'lucide-react'
+import { Check, Copy, Link2 } from 'lucide-react'
 import * as React from 'react'
 
 type CopyInviteLinkProps = {
@@ -19,8 +19,14 @@ export function CopyInviteLink({ meetingId, inviteUrl }: CopyInviteLinkProps) {
   }
 
   return (
-    <div className="invite-box">
-      <p className="field-label">Invite link</p>
+    <div className="invite-card panel">
+      <div className="panel-heading compact">
+        <div>
+          <p className="field-label">Invite</p>
+          <h2>Share room</h2>
+        </div>
+        <Link2 size={17} aria-hidden="true" />
+      </div>
       <div className="copy-row">
         <input value={value} readOnly aria-label="Invite link" />
         <button
@@ -38,6 +44,9 @@ export function CopyInviteLink({ meetingId, inviteUrl }: CopyInviteLinkProps) {
           )}
         </button>
       </div>
+      <p className={copied ? 'copy-feedback is-visible' : 'copy-feedback'}>
+        Invite link copied.
+      </p>
     </div>
   )
 }

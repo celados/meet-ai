@@ -1,5 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Camera, Check, LoaderCircle, Mic, MonitorUp, Settings } from 'lucide-react'
+import {
+  AlertCircle,
+  Camera,
+  Check,
+  LoaderCircle,
+  Mic,
+  MonitorUp,
+  Settings,
+  ShieldCheck,
+} from 'lucide-react'
 import * as React from 'react'
 
 const permissionItems = [
@@ -67,48 +76,76 @@ export function DesktopPermissionsPanel() {
   if (!isDesktop) return null
 
   const snapshot = permissions.data
+  const grantedCount = permissionItems.filter(
+    ({ kind }) => snapshot?.permissions[kind]?.state === 'granted',
+  ).length
+  const allGranted = Boolean(snapshot) && grantedCount === permissionItems.length
 
   return (
-    <section className="desktop-permissions" aria-label="Desktop permissions">
-      <div className="panel-heading compact">
+    <section
+      className={allGranted ? 'desktop-permissions panel is-ready' : 'desktop-permissions panel'}
+      aria-label="Desktop permissions"
+    >
+      <div className="panel-heading">
         <div>
-          <p className="eyebrow">Desktop permissions</p>
-          <h2>System access</h2>
+          <p className="field-label">Desktop</p>
+          <h2>Device access</h2>
         </div>
+        <span className={allGranted ? 'readiness-pill is-ready' : 'readiness-pill'}>
+          {allGranted ? 'Ready' : `${grantedCount}/${permissionItems.length}`}
+        </span>
       </div>
 
-      <div className="permission-list">
-        {permissionItems.map(({ kind, title, description, Icon }) => {
-          const item = snapshot?.permissions[kind]
-          const pending = requestPermission.isPending && requestPermission.variables === kind
-          const opening = openSettings.isPending && openSettings.variables === kind
-          const busy = pending || opening || !item || item.state === 'inProgress'
-          const granted = item?.state === 'granted'
+      {allGranted ? (
+        <div className="permission-ready-row">
+          <ShieldCheck size={18} aria-hidden="true" />
+          <span>Camera, microphone, and screen access are available.</span>
+        </div>
+      ) : (
+        <div className="permission-list">
+          {permissionItems.map(({ kind, title, description, Icon }) => {
+            const item = snapshot?.permissions[kind]
+            const pending = requestPermission.isPending && requestPermission.variables === kind
+            const opening = openSettings.isPending && openSettings.variables === kind
+            const busy = pending || opening || !item || item.state === 'inProgress'
+            const granted = item?.state === 'granted'
 
-          return (
-            <div className="permission-row" key={kind}>
-              <div className="permission-icon" aria-hidden="true">
-                <Icon size={17} />
+            return (
+              <div
+                className={granted ? 'permission-row is-granted' : 'permission-row'}
+                key={kind}
+              >
+                <div className="permission-icon" aria-hidden="true">
+                  {granted ? <Check size={17} /> : <Icon size={17} />}
+                </div>
+                <div className="permission-copy">
+                  <strong>{title}</strong>
+                  <span>{description}</span>
+                  {item?.requiresRestart ? (
+                    <span className="permission-note">
+                      Restart the app after changing this in System Settings.
+                    </span>
+                  ) : null}
+                  {!item && permissions.isError ? (
+                    <span className="permission-note">
+                      <AlertCircle size={13} aria-hidden="true" />
+                      Permission status unavailable.
+                    </span>
+                  ) : null}
+                </div>
+                <PermissionAction
+                  busy={busy}
+                  canOpenSettings={Boolean(item?.canOpenSettings)}
+                  canRequest={Boolean(item?.canRequest)}
+                  granted={granted}
+                  onOpenSettings={() => openSettings.mutate(kind)}
+                  onRequest={() => requestPermission.mutate(kind)}
+                />
               </div>
-              <div className="permission-copy">
-                <strong>{title}</strong>
-                <span>{description}</span>
-                {item?.requiresRestart ? (
-                  <span className="permission-note">Restart the app after changing this in System Settings.</span>
-                ) : null}
-              </div>
-              <PermissionAction
-                busy={busy}
-                canOpenSettings={Boolean(item?.canOpenSettings)}
-                canRequest={Boolean(item?.canRequest)}
-                granted={granted}
-                onOpenSettings={() => openSettings.mutate(kind)}
-                onRequest={() => requestPermission.mutate(kind)}
-              />
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+      )}
     </section>
   )
 }

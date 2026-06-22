@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Download, Loader2 } from 'lucide-react'
+import { Download, FileAudio, FileVideo, HardDrive, Loader2, Timer } from 'lucide-react'
 import { orpc } from '~/lib/orpc'
 
 type RecordingStatusProps = {
@@ -23,19 +23,25 @@ export function RecordingStatus({ meetingId }: RecordingStatusProps) {
 
   const data = statusQuery.data
   const recording = data?.recording
+  const status = data?.status ?? 'NO_RECORDING'
+  const statusMeta = getStatusMeta(status)
 
   return (
-    <div className="recording-status panel">
+    <div className={`recording-status panel status-card status-${status.toLowerCase()}`}>
       <div className="panel-heading">
-        <p className="field-label">Status</p>
+        <div>
+          <p className="field-label">Status</p>
+          <h2>{statusMeta.title}</h2>
+        </div>
         {statusQuery.isFetching ? (
           <Loader2 className="spin subtle" size={16} aria-hidden="true" />
         ) : null}
       </div>
 
-      <div className={`status-badge status-${(data?.status ?? 'none').toLowerCase()}`}>
-        {data?.status ?? 'NO_RECORDING'}
+      <div className={`status-badge status-${status.toLowerCase()}`}>
+        {statusMeta.label}
       </div>
+      <p className="status-copy">{statusMeta.copy}</p>
 
       {recording ? (
         <dl className="recording-meta">
@@ -45,13 +51,19 @@ export function RecordingStatus({ meetingId }: RecordingStatusProps) {
           </div>
           {recording.fileSize ? (
             <div>
-              <dt>Size</dt>
+              <dt>
+                <HardDrive size={13} aria-hidden="true" />
+                Size
+              </dt>
               <dd>{formatBytes(recording.fileSize)}</dd>
             </div>
           ) : null}
           {recording.durationSeconds ? (
             <div>
-              <dt>Duration</dt>
+              <dt>
+                <Timer size={13} aria-hidden="true" />
+                Duration
+              </dt>
               <dd>{Math.round(recording.durationSeconds)}s</dd>
             </div>
           ) : null}
@@ -63,14 +75,16 @@ export function RecordingStatus({ meetingId }: RecordingStatusProps) {
       <div className="download-list">
         {recording?.downloadUrl ? (
           <a className="download-link" href={recording.downloadUrl}>
-            <Download size={16} aria-hidden="true" />
-            Video file
+            <FileVideo size={16} aria-hidden="true" />
+            Video
+            <Download size={15} aria-hidden="true" />
           </a>
         ) : null}
         {recording?.audioDownloadUrl ? (
           <a className="download-link" href={recording.audioDownloadUrl}>
-            <Download size={16} aria-hidden="true" />
-            Audio file
+            <FileAudio size={16} aria-hidden="true" />
+            Audio
+            <Download size={15} aria-hidden="true" />
           </a>
         ) : null}
       </div>
@@ -80,6 +94,56 @@ export function RecordingStatus({ meetingId }: RecordingStatusProps) {
       ) : null}
     </div>
   )
+}
+
+function getStatusMeta(status: string) {
+  if (status === 'INVOKED') {
+    return {
+      title: 'Starting',
+      label: 'INVOKED',
+      copy: 'RealtimeKit accepted the request and is preparing the capture.',
+    }
+  }
+  if (status === 'RECORDING') {
+    return {
+      title: 'Recording live',
+      label: 'RECORDING',
+      copy: 'The room is being captured now.',
+    }
+  }
+  if (status === 'PAUSED') {
+    return {
+      title: 'Paused',
+      label: 'PAUSED',
+      copy: 'The provider has paused the active recording.',
+    }
+  }
+  if (status === 'UPLOADING') {
+    return {
+      title: 'Saving file',
+      label: 'UPLOADING',
+      copy: 'The recording is processing before download links appear.',
+    }
+  }
+  if (status === 'UPLOADED') {
+    return {
+      title: 'Ready',
+      label: 'UPLOADED',
+      copy: 'The latest recording is available below.',
+    }
+  }
+  if (status === 'ERRORED') {
+    return {
+      title: 'Needs attention',
+      label: 'ERRORED',
+      copy: 'The latest recording could not finish cleanly.',
+    }
+  }
+  return {
+    title: 'Idle',
+    label: 'NO RECORDING',
+    copy: 'No capture has been started for this room.',
+  }
 }
 
 function formatBytes(bytes: number) {
