@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "deploy": "bun run build && wrangler deploy",
     "cf-typegen": "wrangler types",
+    "icons:generate": "bash scripts/generate-icons.sh",
     "desktop:build-main": "bun build desktop/main.ts --target=node --format=cjs --outfile=dist/desktop/main.cjs --external electron && bun build desktop/preload.ts --target=node --format=cjs --outfile=dist/desktop/preload.cjs --external electron",
     "desktop:prepare": "bun run desktop:build-main && bun desktop/prepare-package.ts",
     "desktop:dev": "bun run desktop:build-main && electron dist/desktop/main.cjs",

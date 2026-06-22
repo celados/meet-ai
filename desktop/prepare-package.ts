@@ -6,6 +6,7 @@ const rootDir = dirname(dirname(fileURLToPath(import.meta.url)))
 const outputDir = join(rootDir, 'dist', 'desktop-app')
 const entitlementsPath = join(outputDir, 'entitlements.mac.plist')
 const notarizeScriptPath = join(rootDir, 'desktop', 'notarize.cjs')
+const desktopIconPath = join(rootDir, 'desktop', 'assets', 'icon.icns')
 const shouldSignMac = process.env.MEET_DESKTOP_SIGN === '1'
 const rootPackage = JSON.parse(await readFile(join(rootDir, 'package.json'), 'utf8')) as {
   version?: string
@@ -48,6 +49,7 @@ function createDesktopPackageJson(electronVersionValue: string) {
       appId: 'com.celados.meetai',
       productName: 'Meet AI',
       electronVersion: electronVersionValue,
+      icon: desktopIconPath,
       npmRebuild: false,
       nodeGypRebuild: false,
       afterSign: notarizeScriptPath,

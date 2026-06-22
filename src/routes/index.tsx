@@ -44,8 +44,11 @@ function HomePage() {
       <section className="workspace">
         <aside className="control-panel" aria-label="Meeting setup">
           <div className="brand-block">
-            <p className="eyebrow">Internal meeting</p>
-            <h1>Meet AI</h1>
+            <img className="brand-mark" src="/brand/meet-ai-mark.svg" alt="" aria-hidden="true" />
+            <div>
+              <p className="eyebrow">Internal meeting</p>
+              <h1>Meet AI</h1>
+            </div>
           </div>
 
           <JoinMeetingForm

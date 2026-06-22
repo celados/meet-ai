@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Meet AI logo</title>
+  <defs>
+    <linearGradient id="bg" x1="80" y1="56" x2="432" y2="456" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1b8dff"/>
+      <stop offset="0.56" stop-color="#0b62f0"/>
+      <stop offset="1" stop-color="#1236a8"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="140" y1="154" x2="372" y2="326" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dbeeff"/>
+    </linearGradient>
+    <filter id="shadow" x="70" y="90" width="384" height="322" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#082c8e" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <path
+    fill="#ffffff"
+    fill-opacity="0.18"
+    d="M86 142c49-60 132-88 222-66 68 16 116 60 142 120 13 31-26 56-53 36-51-38-109-55-173-50-41 3-79 15-113 35-34 20-62-45-25-75Z"
+  />
+  <g filter="url(#shadow)">
+    <rect x="108" y="160" width="230" height="172" rx="44" fill="url(#lens)"/>
+    <path d="M342 214 412 172c18-11 40 2 40 23v122c0 21-22 34-40 23l-70-42v-84Z" fill="#f3f8ff"/>
+    <path d="M164 220h100" fill="none" stroke="#0b62f0" stroke-linecap="round" stroke-width="30"/>
+    <path d="M164 276h72" fill="none" stroke="#0b62f0" stroke-linecap="round" stroke-width="30"/>
+  </g>
+  <path
+    fill="none"
+    stroke="#70f2ff"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="22"
+    d="m378 94 15 36 36 15-36 15-15 36-15-36-36-15 36-15 15-36Z"
+  />
+  <circle cx="394" cy="348" r="22" fill="#70f2ff"/>
+</svg>
