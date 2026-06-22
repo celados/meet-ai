@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "meet-ai",
+  "compatibility_date": "2026-06-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "meet.celados.com",
+      "custom_domain": true
+    }
+  ],
+  "secrets": {
+    "required": [
+      "CF_ACCOUNT_ID",
+      "REALTIMEKIT_APP_ID",
+      "CLOUDFLARE_API_TOKEN",
+      "PUBLIC_APP_URL"
+    ]
+  }
+}

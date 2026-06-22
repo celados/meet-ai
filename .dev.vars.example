@@ -1,0 +1,5 @@
+CF_ACCOUNT_ID="your-cloudflare-account-id"
+REALTIMEKIT_APP_ID="your-realtimekit-app-id"
+CLOUDFLARE_API_TOKEN="your-cloudflare-api-token"
+PUBLIC_APP_URL="http://localhost:3000"
+REALTIMEKIT_PRESET_NAME="group_call_host"

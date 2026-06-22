@@ -1,0 +1,52 @@
+{
+  "name": "meet-ai",
+  "version": "0.1.0",
+  "description": "Internal meeting tool built with TanStack Start, Cloudflare RealtimeKit, and Electron.",
+  "author": "Celados",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && find dist -name '.dev.vars*' -type f -delete && tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "deploy": "bun run build && wrangler deploy",
+    "cf-typegen": "wrangler types",
+    "desktop:build-main": "bun build desktop/main.ts --target=node --format=cjs --outfile=dist/desktop/main.cjs --external electron && bun build desktop/preload.ts --target=node --format=cjs --outfile=dist/desktop/preload.cjs --external electron",
+    "desktop:prepare": "bun run desktop:build-main && bun desktop/prepare-package.ts",
+    "desktop:dev": "bun run desktop:build-main && electron dist/desktop/main.cjs",
+    "desktop:pack": "bun run desktop:prepare && electron-builder --dir --projectDir dist/desktop-app",
+    "desktop:dist": "bun run desktop:prepare && electron-builder --projectDir dist/desktop-app",
+    "desktop:release:mac": "MEET_DESKTOP_SIGN=1 MEET_DESKTOP_NOTARIZE=1 bun run desktop:dist",
+    "desktop:smoke": "bun run desktop:pack && bun desktop/smoke.ts"
+  },
+  "dependencies": {
+    "@cloudflare/realtimekit-react": "^2.0.0",
+    "@cloudflare/realtimekit-react-ui": "^2.0.0",
+    "@orpc/client": "beta",
+    "@orpc/server": "beta",
+    "@orpc/tanstack-query": "beta",
+    "@tanstack/react-query": "^5.90.12",
+    "@tanstack/react-router": "^1.170.16",
+    "@tanstack/react-router-devtools": "^1.167.0",
+    "@tanstack/react-start": "^1.168.26",
+    "lucide-react": "^0.561.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.29.0",
+    "@electron/notarize": "^3.1.1",
+    "@types/node": "^22.5.4",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.14",
+    "wrangler": "^4.74.0"
+  }
+}
